@@ -76,7 +76,7 @@ To work with this project, ensure you have the following:
    - For Lambda and IAM resources in Task 4:
      ```bash
      aws configure
-     cd iac/dev/eu-west-1/lambda-iam-resources
+     cd iac/dev/eu-west-1/lambda-resources
      terragrunt apply
      ```
 
