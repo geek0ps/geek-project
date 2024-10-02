@@ -41,13 +41,6 @@ To work with this project, ensure you have the following:
 ## **Setup Instructions**
 
 ### **1. Clone the Repositories**
-   To work with the Litecoin application (Tasks 1 and 2):
-   ```bash
-   git clone https://github.com/geek0ps/litecoin-deployment.git
-   cd litecoin-deployment
-   ```
-
-   To work with the S3, IAM, and Lambda resources (Tasks 3 and 4):
    ```bash
    git clone https://github.com/geek0ps/geek-project.git
    cd geek-project
