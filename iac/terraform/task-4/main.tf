@@ -8,11 +8,11 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Zip Lambda code using archive_file data source
+# package the lambda code
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/lambda_code" 
-  output_path = "${path.module}/lambda_package.zip"
+  output_path = "${path.module}/lambda_packaged_code.zip"
 }
 
 # Lambda Function to move files within the S3 bucket
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "s3_lambda" {
   timeout       = 10
 }
 
-# Add S3 event trigger for Lambda on upload to "uploads/" directory
+# Add S3 event trigger for Lambda on upload to "uploads/" dirctory
 resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = var.bucket_id
 
