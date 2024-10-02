@@ -6,50 +6,48 @@ This repository contains the deployment of a Dockerized Litecoin application and
 
 ## **Table of Contents**
 - [Project Overview](#project-overview)
-- [Task Breakdown](#task-breakdown)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
-- [Task 3: Terraform/Terragrunt AWS Infrastructure](#task-3-terraformterragrunt-aws-infrastructure)
-- [Task 4: AWS Lambda Function for S3](#task-4-aws-lambda-function-for-s3)
 - [CI/CD Workflow](#cicd-workflow)
-
+- [Secrets Configuration](#secrets-configuration)
 ---
 
 ## **Project Overview**
 
 This project comprises four main tasks:
-1. **Docker**: Containerizing the Litecoin application using Docker for secure deployment. [View the repository for Task 1 and 2](https://github.com/geek0ps/litecoin-deployment).
-2. **CI/CD**: Implementing a continuous integration/continuous deployment (CI/CD) pipeline to automatically build and deploy the Docker image to a remote server using GitHub Actions. [View the repository for Task 1 and 2](https://github.com/geek0ps/litecoin-deployment).
-3. **Terraform/Terragrunt**: Automating the creation of AWS resources, such as S3 buckets and IAM policies, using Terraform and Terragrunt.
-4. **AWS Lambda**: Writing a Lambda function triggered by file uploads to an S3 bucket, which moves the files to a different directory.
+1. **Docker**: Containerizing the Litecoin application using Docker and ensuring its secure deployment.
+2. **CI/CD**: Implementing a continuous integration/continuous deployment (CI/CD) pipeline to automatically build and deploy the Docker image to a remote server using GitHub Actions.
+3. **Terraform/Terragrunt**: Creating AWS infrastructure with Terraform, including an S3 bucket with lifecycle policies and necessary IAM roles and policies.
+4. **AWS Lambda**: Writing a Lambda function triggered by file uploads to an S3 bucket, which moves the file to a different directory.
 
 ---
 
 ## **Prerequisites**
 
-The following CLI tools need to be installed on your system before proceeding:
+To work with this project, ensure you have the following:
 
-1. **Docker**: To run the Litecoin container. Install [Docker](https://docs.docker.com/get-docker/).
-2. **AWS CLI**: For managing AWS credentials and testing Lambda functions. Install [AWS CLI](https://aws.amazon.com/cli/).
-3. **Terraform**: To manage infrastructure as code. Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli).
-4. **Terragrunt**: A wrapper for Terraform to make the code DRY. Install [Terragrunt](https://terragrunt.gruntwork.io/docs/getting-started/install/).
-5. **Git**: To clone the repositories and manage version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
-6. **DockerHub Account**: To push the Docker image for Litecoin. Sign up at [DockerHub](https://hub.docker.com/).
-7. **GitHub Account**: To use GitHub Actions for CI/CD. Sign up at [GitHub](https://github.com/).
+- **AWS Account**: To apply the Terraform/Terragrunt code and create the required resources.
+- **Docker**: To run the Litecoin container.
+- **DockerHub Account**: To push the Docker image as part of the CI/CD pipeline.
+- **GitHub Account**: To use GitHub Actions for CI/CD.
+- **Terraform and Terragrunt**: To manage AWS infrastructure.
+- **CLI Tools**: Make sure to install the following command-line tools:
+  - **Docker**: [Docker Installation Guide](https://docs.docker.com/get-docker/)
+  - **Terraform**: [Terraform Installation Guide](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+  - **Terragrunt**: [Terragrunt Installation Guide](https://terragrunt.gruntwork.io/docs/getting-started/installation/)
 
 ---
 
 ## **Setup Instructions**
 
-### **1. Clone the Repository**
-
-To work with the Litecoin application in Task 1 and 2:
+### **1. Clone the Repositories**
+   To work with the Litecoin application (Tasks 1 and 2):
    ```bash
    git clone https://github.com/geek0ps/litecoin-deployment.git
    cd litecoin-deployment
    ```
 
-For the S3, IAM, and Lambda resources in Task 3 and Task 4:
+   To work with the S3, IAM, and Lambda resources (Tasks 3 and 4):
    ```bash
    git clone https://github.com/geek0ps/geek-project.git
    cd geek-project
@@ -67,33 +65,45 @@ For the S3, IAM, and Lambda resources in Task 3 and Task 4:
      ```
 
 ### **3. Running Terragrunt Code for AWS Infrastructure**
-
    - Navigate to the directory where the Terragrunt configuration is stored:
-   ```bash
-   cd iac/dev/eu-west-1/bucket-iam-resources
-   ```
-
-   - Initialize Terragrunt and apply the Terraform configuration:
+   - For S3 and IAM resources in Task 3:
      ```bash
-     terragrunt init
+     aws configure
+     cd iac/dev/eu-west-1/bucket-iam-resources
      terragrunt apply
      ```
 
-   - This will provision the S3 bucket, IAM policies, and associated resources.
-
----
-
-## **Task 4: AWS Lambda Function for S3**
-   - The AWS Lambda function is deployed via the AWS Console or Terraform scripts.
-   - The function is triggered when files are uploaded to the S3 bucket.
+   - For Lambda and IAM resources in Task 4:
+     ```bash
+     aws configure
+     cd iac/dev/eu-west-1/lambda-iam-resources
+     terragrunt apply
+     ```
 
 ---
 
 ## **CI/CD Workflow**
-- The GitHub Actions pipeline automates the deployment of the Dockerized Litecoin app.
-- To update the pipeline configuration, edit the `.github/workflows/ci-cd.yml` file.
 
+The CI/CD pipeline automates the process of building the Docker image, pushing it to DockerHub, and deploying the updated image to a remote server using GitHub Actions.
 
+### **Secrets Configuration**
 
-### **Note**
-The CI/CD workflow assumes there is docker-compose installed on the virtual machine being deployed to and it also assumes there is docker-compose.yml file situated in the home directory of the user specified.
+Before running the CI/CD pipeline, ensure that the necessary secrets are configured in your GitHub repository under **Settings > Secrets and variables > Actions > New repository secret**.
+
+Here is the list of required secrets:
+
+1. **`DOCKER_USERNAME`**: Your DockerHub username.
+2. **`DOCKER_PASSWORD`**: A personal access token (PAT) for DockerHub.
+3. **`SERVER_IP`**: The IP address of the remote server where the Docker container will be deployed.
+4. **`SERVER_USERNAME`**: The username of the remote server for SSH access.
+5. **`SERVER_PASSWORD` or `SERVER_SSH_KEY`**: Either the password for the SSH connection or an SSH private key.
+
+### **Setting up the CI/CD Workflow**
+
+1. **Add the secrets**: Follow the instructions above to add the required secrets to your GitHub repository.
+   
+2. **Trigger the Workflow**: The CI/CD pipeline is triggered on a `push` to the `main` branch. Once triggered, the following steps occur:
+   - **Build the Docker image**: The image is built from the Dockerfile and tagged with the latest Git commit SHA.
+   - **Push to DockerHub**: The image is pushed to DockerHub using the credentials provided in the secrets.
+   - **Deploy to the server**: The Docker image is pulled from DockerHub and deployed on the remote server using SSH and Docker Compose.
+
