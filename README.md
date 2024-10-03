@@ -81,7 +81,6 @@ To work with this project, ensure you have the following:
       pip install <library-name> -t /path/to/your/lambda/folder
       ```
     - Step 2: Package the installed libraries along with your Lambda function code into a ZIP file. Make sure all dependencies and your Lambda function (lambda_function.py) are in the root of the ZIP.
-
       ```bash
       cd /path/to/your/lambda/folder
       zip -r lambda_function.zip .
