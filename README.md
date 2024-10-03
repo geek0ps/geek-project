@@ -75,17 +75,17 @@ To work with this project, ensure you have the following:
 
 
 **Theory Answer:**
-  -> Use a Deployment Package (ZIP file)
-    - Step 1: Install the required library locally (on your machine) or in a virtual environment using pip.
-      ```bash
-      pip install <library-name> -t /path/to/your/lambda/folder
-      ```
-    - Step 2: Package the installed libraries along with your Lambda function code into a ZIP file. Make sure all dependencies and your Lambda function (lambda_function.py) are in the root of the ZIP.
-      ```bash
-      cd /path/to/your/lambda/folder
-      zip -r lambda_function.zip .
-      ```
-    - Step 3: Upload this ZIP file to AWS Lambda through the AWS Management Console, AWS CLI, or SDK.
+Use a Deployment Package (ZIP file)
+  - Step 1: Install the required library locally (on your machine) or in a virtual environment using pip.
+    ```bash
+    pip install <library-name> -t /path/to/your/lambda/folder
+    ```
+  - Step 2: Package the installed libraries along with your Lambda function code into a ZIP file. Make sure all dependencies and your Lambda function (lambda_function.py) are in the root of the ZIP.
+    ```bash
+    cd /path/to/your/lambda/folder
+    zip -r lambda_function.zip .
+    ```
+  - Step 3: Upload this ZIP file to AWS Lambda through the AWS Management Console, AWS CLI, or SDK.
 
 
 ---
